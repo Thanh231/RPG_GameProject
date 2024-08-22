@@ -21,6 +21,7 @@ public class PlayerIdelState : PlayerGroundStats
     {
         base.Update();
 
+        if (player.isDead) return;
         player.SetVelocity(player.inputX * player.speed, player.rd.velocity.y);
 
         if(player.inputX != 0 && !player.IsWall() && !player.isBusy && player.IsGround())

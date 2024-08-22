@@ -9,7 +9,7 @@ public class Skeleton_Attack_State : EnemyState
 
     public override void Enter()
     {
-        //skeleton.rd.velocity = Vector2.zero;
+        
         base.Enter();
         timeValue = 1.8f;
     }
@@ -22,11 +22,10 @@ public class Skeleton_Attack_State : EnemyState
     public override void Update()
     {
         base.Update();
-        if (enemy.isKnockBack ) return;
+        if (enemy.isKnockBack || skeleton.isFreeze) return;
 
         skeleton.rd.velocity = Vector2.zero;
-        
-        if(timeValue < 0)
+        if (timeValue < 0)
         {
             stateMachine.ChangeState(skeleton.enemy_idel);
         }

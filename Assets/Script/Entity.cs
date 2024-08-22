@@ -3,18 +3,21 @@ using UnityEngine;
 
 public class Entity : MonoBehaviour
 {
+    public CharacterStats stats {  get; private set; }
+    #region Collision Check
     public float attackDistance;
     public float facingDir;
     public LayerMask playerMask;
 
     public Transform attackCheck;
     public float attackRadius;
-    public EnetityFx fx;
+    public EnetityFx fx { get; private set; }
 
     [Header("Knock Back")]
     public Vector2 knockBackDir;
     public float knockBackTime;
     public bool isKnockBack;
+    #endregion
 
     #region Component
     public Animator anim { get; private set; }
@@ -38,6 +41,8 @@ public class Entity : MonoBehaviour
         anim = GetComponentInChildren<Animator>();
         rd = GetComponent<Rigidbody2D>();
         fx = GetComponent<EnetityFx>();
+        
+        stats = GetComponent<CharacterStats>();
     }
     protected virtual void Start()
     {
@@ -47,7 +52,6 @@ public class Entity : MonoBehaviour
     }
     public void Damage()
     {
-        Debug.Log(gameObject.name + " was damaged");
         fx.StartCoroutine(fx.Flash());
         StartCoroutine(KnockBack());
     }
@@ -64,20 +68,20 @@ public class Entity : MonoBehaviour
     #region Check Physic
 
     public bool IsGround() => Physics2D.Raycast(groundCheck.position, Vector2.down, groundDistance, groundLayer);
-    public bool IsWall() => Physics2D.Raycast(wallCheck.position, transform.right, wallDistance, groundLayer);
+    public bool IsWall() => Physics2D.Raycast(wallCheck.position, new Vector2(facingDir,0), wallDistance, groundLayer);
     public RaycastHit2D IsDetectPlayer() => Physics2D.Raycast(wallCheck.position, transform.right, attackDistance ,playerMask);
 
     #endregion
 
     #region Collision
 
-    public void OnDrawGizmos()
+    /*public void OnDrawGizmos()
     {
         Gizmos.DrawLine(groundCheck.position, new Vector2(groundCheck.position.x,groundCheck.position.y - groundDistance));
         Gizmos.DrawLine(wallCheck.position, new Vector2((wallCheck.position.x + facingDir*wallDistance), wallCheck.position.y));
         Gizmos.DrawLine(wallCheck.position, new Vector2((wallCheck.position.x + facingDir * attackDistance), wallCheck.position.y));
         Gizmos.DrawWireSphere(attackCheck.position, attackRadius);
-    }
+    }*/
     #endregion
 
     #region SetVelocity and Flip
@@ -98,9 +102,11 @@ public class Entity : MonoBehaviour
         if (x > 0 && !isFlip)
         {
             facingDir = 1;
-            transform.Rotate(0, 180, 0);
+            transform.localScale = new Vector3(transform.localScale.x*(-1),transform.localScale.y,transform.localScale.z);
+            //transform.Rotate(0, 180, 0);
             isFlip = true;
             //StartCoroutine(ChangeFlip(x));
+
         }
         else if (x < 0 && isFlip)
         {
@@ -111,4 +117,8 @@ public class Entity : MonoBehaviour
         }
     }
     #endregion
+    public virtual void Die()
+    {
+
+    }
 }

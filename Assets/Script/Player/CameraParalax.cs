@@ -23,9 +23,9 @@ public class CameraParalax : MonoBehaviour
         float distanceToMove = mainCam.transform.position.x * paralaxEffect;
 
 
-        Vector3 targetPosition = new Vector3 (xPos + distanceToMove,transform.position.y, transform.position.z);
+        
 
-         transform.position = Vector3.Lerp(transform.position, targetPosition,test);
+        
         if (distanceMove > xPos + length)
         {
             xPos = xPos + length;
@@ -33,7 +33,8 @@ public class CameraParalax : MonoBehaviour
         else if (distanceMove < xPos - length)
         {
             xPos = xPos - length;
-        }    
-        
+        }
+        Vector3 targetPosition = new Vector3(xPos + distanceToMove, transform.position.y, transform.position.z);
+        transform.position = Vector3.Lerp(transform.position, targetPosition, test);
     }
 }

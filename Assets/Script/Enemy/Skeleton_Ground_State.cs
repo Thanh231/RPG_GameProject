@@ -21,7 +21,7 @@ public class Skeleton_Ground_State : EnemyState
     {
         base.Update();
 
-        if (skeleton.isKnockBack) return;
+        if (skeleton.isKnockBack || skeleton.isFreeze) return;
 
         if(enemy.IsDetectPlayer() && enemy.IsGround())
         {

@@ -25,8 +25,7 @@ public class Skeleton_Battle_State : EnemyState
     {
         base.Update();
 
-        if (enemy.isKnockBack ) return;
-
+        if (enemy.isKnockBack || skeleton.isFreeze) return;
         skeleton.SetVelocity(skeleton.facingDir * skeleton.speed, skeleton.rd.velocityY);
         if (!enemy.IsDetectPlayer())
         {

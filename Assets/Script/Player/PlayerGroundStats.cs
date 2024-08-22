@@ -22,8 +22,9 @@ public class PlayerGroundStats : StateActor
     public override void Update()
     {
         base.Update();
+        if (player.isDead) return;
 
-        if(Input.GetKeyDown(KeyCode.Space) && player.IsGround())
+        if (Input.GetKeyDown(KeyCode.Space) && player.IsGround())
         {
             stateMachine.ChangeState(player.jump);
         }
@@ -31,9 +32,26 @@ public class PlayerGroundStats : StateActor
         {
             stateMachine.ChangeState(player.attack);
         }
-        if(Input.GetMouseButtonDown(0))
+        if(Input.GetKeyDown(KeyCode.Q) && !player.isDead)
         {
             stateMachine.ChangeState(player.counterAttack);
         }
+        if(Input.GetMouseButtonDown(0) && CheckSword())
+        {
+            stateMachine.ChangeState(player.aimState);
+        }
+        if(Input.GetKeyDown(KeyCode.R) && !player.isDead)
+        {
+            stateMachine.ChangeState(player.blackHoleState);
+        }
+    }
+    public bool CheckSword()
+    {
+        if(!player.sword)
+        {
+            return true;
+        }
+        player.sword.GetComponent<SwordController>().ReTurnSword();
+        return false;
     }
 }

@@ -136,6 +136,7 @@ GameObject:
   - component: {fileID: 5833267419271730477}
   - component: {fileID: 5315776435523423412}
   - component: {fileID: 5734776632024974420}
+  - component: {fileID: 4927835229745565161}
   m_Layer: 6
   m_Name: Skeleton
   m_TagString: Untagged
@@ -246,7 +247,6 @@ MonoBehaviour:
     m_Bits: 128
   attackCheck: {fileID: 5380098052129512874}
   attackRadius: 0.55
-  fx: {fileID: 0}
   knockBackDir: {x: 3, y: 15}
   knockBackTime: 0.2
   isKnockBack: 0
@@ -255,13 +255,16 @@ MonoBehaviour:
     m_Bits: 8
   speed: 2
   groundCheck: {fileID: 4994009722358601588}
-  groundDistance: 0.3
+  groundDistance: 2
   wallCheck: {fileID: 1372706950175638288}
   wallDistance: 0.23
   idleTime: 2
   stunDir: {x: 5, y: 15}
   canbeStun: 0
   attackImage: {fileID: 5981748816056167214}
+  isFreeze: 0
+  defaultSpeed: 0
+  cd: {fileID: 0}
 --- !u!114 &5734776632024974420
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -275,6 +278,64 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   wasDamage: {fileID: 2100000, guid: d205b27faa7af534b996b4d37c4ca3ce, type: 2}
+--- !u!114 &4927835229745565161
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4452308429114670205}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bbfb741bdb2343c43847f1debe44a424, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  strength:
+    baseValue: 2
+    modify: 
+  agility:
+    baseValue: 0
+    modify: 
+  intelligence:
+    baseValue: 0
+    modify: 
+  vitality:
+    baseValue: 0
+    modify: 
+  damage:
+    baseValue: 5
+    modify: 
+  maxHealth:
+    baseValue: 5
+    modify: 
+  evasion:
+    baseValue: 0
+    modify: 
+  armor:
+    baseValue: 0
+    modify: 
+  resistanceMagical:
+    baseValue: 0
+    modify: 
+  curentHealth: 0
+  cirtChance:
+    baseValue: 99
+    modify: 
+  critPower:
+    baseValue: 13
+    modify: 
+  fireDamage:
+    baseValue: 5
+    modify: 
+  iceDamage:
+    baseValue: 0
+    modify: 
+  ligtningDamage:
+    baseValue: 0
+    modify: 
+  isIgnite: 0
+  isChill: 0
+  isShock: 0
 --- !u!1 &5220878775332239010
 GameObject:
   m_ObjectHideFlags: 0

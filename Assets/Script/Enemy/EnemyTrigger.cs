@@ -10,8 +10,9 @@ public class EnemyTrigger : MonoBehaviour
         {
             if (hit.GetComponent<Player>() != null)
             {
-                Player player = hit.GetComponent<Player>();
-                player.Damage();
+                CharacterStats playerTarget = hit.GetComponent<CharacterStats>();
+
+                skeleton.stats.DoDamage(playerTarget);
             }
         }
    }
