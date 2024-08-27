@@ -2,7 +2,7 @@ using UnityEngine;
 
 public class EnemyTrigger : MonoBehaviour 
 {
-    public Enemy_Skeleton skeleton;
+    public Enemy skeleton;
    private void AttackPlayer()
    {
         var collider2D = Physics2D.OverlapCircleAll(skeleton.attackCheck.position, skeleton.attackRadius);
@@ -10,8 +10,9 @@ public class EnemyTrigger : MonoBehaviour
         {
             if (hit.GetComponent<Player>() != null)
             {
-                Player player = hit.GetComponent<Player>();
-                player.Damage();
+                CharacterStats playerTarget = hit.GetComponent<CharacterStats>();
+
+                skeleton.stats.DoDamage(playerTarget);
             }
         }
    }

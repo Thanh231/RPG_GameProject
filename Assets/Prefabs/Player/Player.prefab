@@ -106,7 +106,7 @@ SpriteRenderer:
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 1915389791
-  m_SortingLayer: 3
+  m_SortingLayer: 4
   m_SortingOrder: 0
   m_Sprite: {fileID: -3318188226485093758, guid: 24f82f63008181d47bf5437e5820e4e7, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -154,6 +154,37 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   player: {fileID: 5936297671267367528}
+--- !u!1 &5227771028376805795
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1863736504782924997}
+  m_Layer: 7
+  m_Name: DotParent
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1863736504782924997
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5227771028376805795}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 4397074520652112734}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &6158224918945161663
 GameObject:
   m_ObjectHideFlags: 0
@@ -164,7 +195,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4371091741358392906}
   m_Layer: 7
-  m_Name: Attack Counter
+  m_Name: Attack Counter Check
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -198,6 +229,7 @@ GameObject:
   - component: {fileID: 8055115165332005668}
   - component: {fileID: 5936297671267367528}
   - component: {fileID: 7519408894695242303}
+  - component: {fileID: 552665925299003448}
   m_Layer: 7
   m_Name: Player
   m_TagString: Untagged
@@ -223,6 +255,7 @@ Transform:
   - {fileID: 2182545135966108159}
   - {fileID: 8877021898476733668}
   - {fileID: 4371091741358392906}
+  - {fileID: 1863736504782924997}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!70 &2813180491258301153
@@ -308,7 +341,6 @@ MonoBehaviour:
     m_Bits: 0
   attackCheck: {fileID: 8877021898476733668}
   attackRadius: 0.6
-  fx: {fileID: 0}
   knockBackDir: {x: 0, y: 0}
   knockBackTime: 0
   isKnockBack: 0
@@ -316,22 +348,26 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 8
   speed: 7
+  thunderPrefabs: {fileID: 5832927280374514806, guid: 539f7603490ae594186e226b1507563a, type: 3}
   groundCheck: {fileID: 5754982203926911961}
   groundDistance: 0.3
   wallCheck: {fileID: 2182545135966108159}
   wallDistance: 0.12
   isdoubleJump: 0
-  inputX: 0
-  jumpForce: 12
-  dashCooldown: 0.2
+  attackCounterCheck: {fileID: 4371091741358392906}
+  attackCheckRadius: 2
+  jumpForce: 10
   isCombo: 0
   isBusy: 0
   attackForce:
   - {x: 15, y: 5}
   - {x: 20, y: 5}
   - {x: 25, y: 5}
+  impactSwordReturn: {x: 7, y: 2}
   gravity: 3.5
+  dashDuration: 0.2
   dashSpeed: 20
+  isDead: 0
 --- !u!114 &7519408894695242303
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -345,6 +381,68 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   wasDamage: {fileID: 2100000, guid: fa5e7274571b5dc489127c0a3529f88e, type: 2}
+  ignite: {fileID: 2100000, guid: 587e322552d5ed5499fac1585ca381b5, type: 2}
+  chill: {fileID: 2100000, guid: e1c914cbf3b263445acaccbe35e68b76, type: 2}
+  shock: {fileID: 2100000, guid: 1013845327d7c9b409b3b90a943dcdb9, type: 2}
+--- !u!114 &552665925299003448
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7364218129822428147}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 77fe6d2a016e60e43bd2ec6bd2457d00, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  applyAlimentTime: 4
+  strength:
+    baseValue: 15
+    modify: 
+  agility:
+    baseValue: 0
+    modify: 
+  intelligence:
+    baseValue: 0
+    modify: 
+  vitality:
+    baseValue: 5
+    modify: 
+  maxHealth:
+    baseValue: 10000
+    modify: 
+  evasion:
+    baseValue: 15
+    modify: 
+  armor:
+    baseValue: 5
+    modify: 
+  resistanceMagical:
+    baseValue: 0
+    modify: 
+  curentHealth: 0
+  damage:
+    baseValue: 10
+    modify: 
+  critChance:
+    baseValue: 0
+    modify: 
+  critPower:
+    baseValue: 0
+    modify: 
+  fireDamage:
+    baseValue: 0
+    modify: 
+  iceDamage:
+    baseValue: 5
+    modify: 
+  ligtningDamage:
+    baseValue: 0
+    modify: 
+  isIgnite: 0
+  isChill: 0
+  isShock: 0
 --- !u!1 &8430729398178225224
 GameObject:
   m_ObjectHideFlags: 0

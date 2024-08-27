@@ -34,6 +34,10 @@ public class PlayerJumpState : StateActor
             player.rd.velocity = new Vector2(player.rd.velocityX, player.jumpForce);
             player.isdoubleJump = false;
         }
+        if(player.IsWall())
+        {
+            stateMachine.ChangeState(player.slide);
+        }
     }
     
 }

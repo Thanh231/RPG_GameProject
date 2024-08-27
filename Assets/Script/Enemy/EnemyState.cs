@@ -19,11 +19,11 @@ public class EnemyState
     public virtual void Exit()
     {
         enemy.anim.SetBool(animString, false);
+        enemy.LastAnimString(animString);
     }
     public virtual void Update()
     {
         enemy.anim.SetBool(animString, true);
         timeValue -= Time.deltaTime;
-        
     }
 }

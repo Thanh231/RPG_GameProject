@@ -22,18 +22,38 @@ public class PlayerGroundStats : StateActor
     public override void Update()
     {
         base.Update();
+        if (player.isDead) return;
 
-        if(Input.GetKeyDown(KeyCode.Space) && player.IsGround())
+        if (Input.GetKeyDown(KeyCode.Space) && player.IsGround())
         {
             stateMachine.ChangeState(player.jump);
         }
         if(Input.GetKeyDown(KeyCode.F) && player.IsGround())
         {
+            AudioController.Ins.PlaySound(AudioController.Ins.sword);
             stateMachine.ChangeState(player.attack);
         }
-        if(Input.GetMouseButtonDown(0))
+        if(Input.GetKeyDown(KeyCode.Q) && !player.isDead && player.counterTimer < 0)
         {
             stateMachine.ChangeState(player.counterAttack);
+            player.counterTimer = player.counterCoolDowm;
         }
+        if(Input.GetMouseButtonDown(0) && CheckSword())
+        {
+            stateMachine.ChangeState(player.aimState);
+        }
+        if(Input.GetKeyDown(KeyCode.R) && !player.isDead && player.skill.blackHoleSkill.CanUseSkill() && player.skill.blackHoleSkill.canUseBlackHole)
+        {
+            stateMachine.ChangeState(player.blackHoleState);
+        }
+    }
+    public bool CheckSword()
+    {
+        if(!player.sword)
+        {
+            return true;
+        }
+        player.sword.GetComponent<SwordController>().ReTurnSword();
+        return false;
     }
 }

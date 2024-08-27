@@ -19,6 +19,7 @@ public class PlayerSlideStats : StateActor
     public override void Update()
     {
         base.Update();
+
         player.SetVelocity(player.inputX * player.speed, player.rd.velocityY);
         if(Input.GetKeyDown(KeyCode.Space)) 
         {

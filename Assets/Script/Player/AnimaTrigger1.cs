@@ -14,9 +14,20 @@ public class AnimaTrigger1 : MonoBehaviour
         {
             if(hit.GetComponent<Enemy>() != null)
             {
-                Enemy enemy = hit.GetComponent<Enemy>();
-                enemy.Damage();
+
+                CharacterStats target = hit.GetComponent<CharacterStats>();
+
+                player.stats.DoDamage(target);
+
             }
         }
+    }
+    public void ThrowSword()
+    {
+        player.skill.swordSkill.CreateSword();
+    }
+    public void CatchSword()
+    {
+        player.stateMachine.ChangeState(player.idel);
     }
 }

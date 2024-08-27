@@ -19,6 +19,7 @@ public class PlayerMoveState : PlayerGroundStats
     {
         base.Update();
 
+
         if (player.inputX == 0 || player.IsWall())
         {
             stateMachine.ChangeState(player.idel);

@@ -20,7 +20,7 @@ public class PlayerAttackState : StateActor
         player.anim.SetInteger("combo", combo);
         timeValue = 0.1f;
         player.StartAvoidMove();
-        player.transform.position += new Vector3(player.attackForce[combo].x * player.transform.right.x, player.attackForce[combo].y) * Time.deltaTime;
+        player.transform.position += new Vector3(player.attackForce[combo].x * player.facingDir * 0.5f, player.attackForce[combo].y) * Time.deltaTime;
 
     }
 

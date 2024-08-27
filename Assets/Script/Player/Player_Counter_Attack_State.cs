@@ -1,6 +1,7 @@
 using UnityEngine;
 public class Player_Counter_Attack_State : StateActor
 {
+    private bool implementCounterAttack;
     public Player_Counter_Attack_State(Player _player, StateMachine _stateMachine, string _animString) : base(_player, _stateMachine, _animString)
     {
     }
@@ -10,6 +11,7 @@ public class Player_Counter_Attack_State : StateActor
         base.Enter();
         player.rd.velocity = Vector2.zero;
         timeValue = 1f;
+        implementCounterAttack = true;
     }
 
     public override void Exit()
@@ -31,6 +33,14 @@ public class Player_Counter_Attack_State : StateActor
                 {
                     timeValue = 1f;
                     player.anim.SetBool("SuccessFullCounterAttack",true);
+
+                    if(implementCounterAttack)
+                    {
+                        player.skill.clone.CreateClone(hitEnemy.transform, new Vector2(2 * hitEnemy.facingDir, 0));
+
+                        implementCounterAttack = false;
+                    }
+                   
                 }
             }
         }

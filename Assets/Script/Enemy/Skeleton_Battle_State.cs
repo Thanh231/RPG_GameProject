@@ -18,15 +18,14 @@ public class Skeleton_Battle_State : EnemyState
     public override void Exit()
     {
         base.Exit();
-        skeleton.speed = 2f;
+        skeleton.speed = skeleton.defaultSpeed;
     }
 
     public override void Update()
     {
         base.Update();
 
-        if (enemy.isKnockBack ) return;
-
+        if (enemy.isKnockBack || skeleton.isFreeze) return;
         skeleton.SetVelocity(skeleton.facingDir * skeleton.speed, skeleton.rd.velocityY);
         if (!enemy.IsDetectPlayer())
         {

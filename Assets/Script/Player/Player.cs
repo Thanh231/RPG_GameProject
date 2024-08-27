@@ -3,26 +3,37 @@ using UnityEngine;
 
 public class Player : Entity
 {
+    
     #region Variable
-    public bool isdoubleJump;
-    public float inputX;
 
+    public bool isdoubleJump;
+    public float inputX { get; private set; }
+    public float inputY { get; private set; }
+    private SpriteRenderer sr;
+
+    #endregion
+    #region Counter  Attack
     [Header("Counter")]
     public Transform attackCounterCheck;
     public float attackCheckRadius;
-    public float inputY { get; private set; }
+    
     public float jumpForce;
-    public float dashCooldown;
     public bool isCombo;
     public bool isBusy;
     public Vector2[] attackForce;
+    public Vector2 impactSwordReturn;
 
     public float gravity = 3.5f;
 
+    #endregion
+    #region Speed
     [Header("Speed")]
-   
-    private float timevalue;
+    public float dashDuration;
     public float dashSpeed;
+    private float defaultSpeed;
+    private float defaultDashSpeed;
+    public SkillManager skill { get; private set; }
+    public GameObject sword { get; private set; }
 
     #endregion
 
@@ -38,13 +49,27 @@ public class Player : Entity
     public PlayerAttackState attack { get; private set; }
     public PlayerJumpWall jumpWall { get; private set; }
     public Player_Counter_Attack_State counterAttack { get; private set; }
+    public PlayerAimState aimState { get; private set; }
+    public PlayerCatchState catchState { get; private set; }
+    public PlayerBlackHoleState blackHoleState { get; private set; }
+    public PlayerDeadStats dead {  get; private set; }
+
+    public bool isDead;
+
+    public bool canCounterAttack;
+    public float counterTimer;
+    public float counterCoolDowm;
+
     #endregion
-    
+
     protected override void Awake()
     {
         base.Awake();
 
         stateMachine = new StateMachine();
+
+        sr = GetComponentInChildren<SpriteRenderer>();
+
         idel = new PlayerIdelState(this, stateMachine, "Idel");
         move = new PlayerMoveState(this, stateMachine, "Move");
         jump = new PlayerJumpState(this, stateMachine, "Jump");
@@ -54,39 +79,71 @@ public class Player : Entity
         attack = new PlayerAttackState(this, stateMachine, "Attack");
         jumpWall = new PlayerJumpWall(this, stateMachine, "Jump");
         counterAttack = new Player_Counter_Attack_State(this, stateMachine, "CounterActtack");
+        aimState = new PlayerAimState(this, stateMachine, "AimSword");
+        catchState = new PlayerCatchState(this, stateMachine, "CatchSword");
+        blackHoleState = new PlayerBlackHoleState(this, stateMachine, "Jump");
+        dead = new PlayerDeadStats(this, stateMachine, "Dead");
     }
     protected override void Start()
     {
         base.Start();
+        
+        defaultSpeed = speed;
+        defaultDashSpeed = dashSpeed;
+
         stateMachine.Iniatial(idel);
+        skill = SkillManager.instance;
+
+        counterTimer = counterCoolDowm;
     }
 
     protected override void Update()
     {
         base.Update();
-
-        timevalue -= Time.deltaTime;
+        if (canCounterAttack)
+        {
+            counterTimer -= Time.deltaTime;
+        }
+        
+        
+        
         stateMachine.state.Update();
 
         CheckMove();
         inputY = Input.GetAxisRaw("Vertical");
 
         Dash();
-    }
-    private void Dash()
-    {
-        if (Input.GetKeyDown(KeyCode.Z) && timevalue < 0 && !IsWall())
+        if(Input.GetKeyDown(KeyCode.E) && !isDead && skill.crystalSkill.canUseCrystal)
         {
-            stateMachine.ChangeState(dash);
-            timevalue = dashCooldown;
-            StartCoroutine(DashWaiting());
+            skill.crystalSkill.UseSkill();
+        }
+        if(skill.attackArroundSkill.CanUseSkill() && skill.attackArroundSkill.canUseAttackArround)
+        {
+            skill.attackArroundSkill.UseSkill();
         }
     }
-    IEnumerator DashWaiting()
+    public override void DecreaseSpeed(float decreasePercent, float second)
     {
-        rd.gravityScale = 0;
-        yield return new WaitForSeconds(dashCooldown);
-        rd.gravityScale = gravity;
+        speed = speed * (1 - decreasePercent);
+        dashSpeed = dashSpeed * (1 - decreasePercent);
+        anim.speed = 1 - decreasePercent;
+        StartCoroutine(RollBackSpeed(second));
+    }
+    
+    IEnumerator RollBackSpeed(float second)
+    {
+        yield return new WaitForSeconds(second);
+        speed = defaultSpeed;
+        dashSpeed = defaultDashSpeed;
+        anim.speed = 1;
+    }
+
+    private void Dash()
+    {
+        if (Input.GetKeyDown(KeyCode.W) && skill.dash.CanUseSkill() && !IsWall() && !isDead && skill.dash.canDash)
+        {
+            stateMachine.ChangeState(dash);
+        }
     }
 
     IEnumerator AvoidMove(float second)
@@ -110,5 +167,34 @@ public class Player : Entity
         {
             inputX = 0;
         }
+    }
+    public void AssignSword(GameObject newSword)
+    {
+        sword = newSword;
+    }
+    public void CatchSword()
+    {
+        stateMachine.ChangeState(catchState);
+        Destroy(sword);
+    }
+    
+    public void HideCharacter(bool isTransparent)
+    {
+        if(isTransparent)
+        {
+            sr.color = Color.clear;
+        }
+        else
+        { 
+            sr.color = Color.white; 
+        }
+    }
+
+    public override void Die()
+    {
+        base.Die();
+        AudioController.Ins.PlaySound(AudioController.Ins.playerDeath);
+        stateMachine.ChangeState(dead);
+        
     }
 }
