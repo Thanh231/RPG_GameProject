@@ -18,7 +18,7 @@ public class Skeleton_Battle_State : EnemyState
     public override void Exit()
     {
         base.Exit();
-        skeleton.speed = 2f;
+        skeleton.speed = skeleton.defaultSpeed;
     }
 
     public override void Update()

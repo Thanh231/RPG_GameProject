@@ -86,9 +86,10 @@ public class SwordController : MonoBehaviour
                     var enemies = Physics2D.OverlapCircleAll(transform.position, 1f);
                     foreach(var enemy in enemies)
                     {
-                        if(enemy.GetComponent<Enemy>() != null)
+                        EnemyStats enemyStats = enemy.GetComponent<EnemyStats>();   
+                        if(enemyStats != null)
                         {
-                            enemy.GetComponent<Enemy>().Damage();
+                            player.stats.DoDamage(enemyStats);
                         }
                     }
 
@@ -183,7 +184,8 @@ public class SwordController : MonoBehaviour
 
     private void TakeDamage_Frezee(Enemy enemy)
     {
-        enemy.Damage();
+        CharacterStats _enemyStats = enemy.GetComponent<EnemyStats>();
+        player.stats.DoDamage(_enemyStats);
         enemy.StartCoroutine("FrezeTimer", freezeTime);
     }
 

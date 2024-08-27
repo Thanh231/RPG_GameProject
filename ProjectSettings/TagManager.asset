@@ -14,7 +14,7 @@ TagManager:
   - Enemy
   - Player
   - Sword
-  - 
+  - Camera
   - 
   - 
   - 
@@ -46,6 +46,9 @@ TagManager:
     locked: 0
   - name: FrontGround
     uniqueID: 343153829
+    locked: 0
+  - name: Item
+    uniqueID: 3832510477
     locked: 0
   - name: Player
     uniqueID: 1915389791

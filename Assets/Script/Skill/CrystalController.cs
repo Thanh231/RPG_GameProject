@@ -8,13 +8,13 @@ public class CrystalController : MonoBehaviour
     private float speedGrow;
     private float speedMove;
     private bool canMove;
-
+    private int damage;
 
     private void Start()
     {
         anim = GetComponent<Animator>();
     }
-    public void SetUpCrystal(float time, float _speedGrow, float _speedMove,bool _canMove)
+    public void SetUpCrystal(float time, float _speedGrow, float _speedMove,bool _canMove,int _damage)
     {
         speedGrow = _speedGrow;
         lifeTime = time;
@@ -59,10 +59,12 @@ public class CrystalController : MonoBehaviour
         var enemyCollider = Physics2D.OverlapCircleAll(transform.position, 2f);
         foreach (var enemy in enemyCollider)
         {
-            Enemy enemyCheck = enemy.GetComponent<Enemy>();
+            CharacterStats enemyCheck = enemy.GetComponent<EnemyStats>();
             if (enemyCheck != null)
             {
-                enemyCheck.Damage();
+                enemyCheck.SetThurnderDamage(20);
+                enemyCheck.TakeDamage(damage);
+                enemyCheck.ApplyAliment(false, false, true);
             }
         }
         

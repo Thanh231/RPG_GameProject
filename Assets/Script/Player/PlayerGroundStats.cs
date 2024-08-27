@@ -30,17 +30,19 @@ public class PlayerGroundStats : StateActor
         }
         if(Input.GetKeyDown(KeyCode.F) && player.IsGround())
         {
+            AudioController.Ins.PlaySound(AudioController.Ins.sword);
             stateMachine.ChangeState(player.attack);
         }
-        if(Input.GetKeyDown(KeyCode.Q) && !player.isDead)
+        if(Input.GetKeyDown(KeyCode.Q) && !player.isDead && player.counterTimer < 0)
         {
             stateMachine.ChangeState(player.counterAttack);
+            player.counterTimer = player.counterCoolDowm;
         }
         if(Input.GetMouseButtonDown(0) && CheckSword())
         {
             stateMachine.ChangeState(player.aimState);
         }
-        if(Input.GetKeyDown(KeyCode.R) && !player.isDead)
+        if(Input.GetKeyDown(KeyCode.R) && !player.isDead && player.skill.blackHoleSkill.CanUseSkill() && player.skill.blackHoleSkill.canUseBlackHole)
         {
             stateMachine.ChangeState(player.blackHoleState);
         }

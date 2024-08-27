@@ -30,6 +30,8 @@ public class Player : Entity
     [Header("Speed")]
     public float dashDuration;
     public float dashSpeed;
+    private float defaultSpeed;
+    private float defaultDashSpeed;
     public SkillManager skill { get; private set; }
     public GameObject sword { get; private set; }
 
@@ -53,6 +55,10 @@ public class Player : Entity
     public PlayerDeadStats dead {  get; private set; }
 
     public bool isDead;
+
+    public bool canCounterAttack;
+    public float counterTimer;
+    public float counterCoolDowm;
 
     #endregion
 
@@ -81,16 +87,25 @@ public class Player : Entity
     protected override void Start()
     {
         base.Start();
+        
+        defaultSpeed = speed;
+        defaultDashSpeed = dashSpeed;
+
         stateMachine.Iniatial(idel);
         skill = SkillManager.instance;
 
-        stats.damage.AddModify(4);
+        counterTimer = counterCoolDowm;
     }
 
     protected override void Update()
     {
         base.Update();
-
+        if (canCounterAttack)
+        {
+            counterTimer -= Time.deltaTime;
+        }
+        
+        
         
         stateMachine.state.Update();
 
@@ -98,18 +113,34 @@ public class Player : Entity
         inputY = Input.GetAxisRaw("Vertical");
 
         Dash();
-        if(Input.GetKeyDown(KeyCode.E) && !isDead)
+        if(Input.GetKeyDown(KeyCode.E) && !isDead && skill.crystalSkill.canUseCrystal)
         {
             skill.crystalSkill.UseSkill();
         }
-        if(skill.attackArroundSkill.CanUseSkill())
+        if(skill.attackArroundSkill.CanUseSkill() && skill.attackArroundSkill.canUseAttackArround)
         {
             skill.attackArroundSkill.UseSkill();
         }
     }
+    public override void DecreaseSpeed(float decreasePercent, float second)
+    {
+        speed = speed * (1 - decreasePercent);
+        dashSpeed = dashSpeed * (1 - decreasePercent);
+        anim.speed = 1 - decreasePercent;
+        StartCoroutine(RollBackSpeed(second));
+    }
+    
+    IEnumerator RollBackSpeed(float second)
+    {
+        yield return new WaitForSeconds(second);
+        speed = defaultSpeed;
+        dashSpeed = defaultDashSpeed;
+        anim.speed = 1;
+    }
+
     private void Dash()
     {
-        if (Input.GetKeyDown(KeyCode.W) && skill.dash.CanUseSkill() && !IsWall() && !isDead)
+        if (Input.GetKeyDown(KeyCode.W) && skill.dash.CanUseSkill() && !IsWall() && !isDead && skill.dash.canDash)
         {
             stateMachine.ChangeState(dash);
         }
@@ -162,6 +193,8 @@ public class Player : Entity
     public override void Die()
     {
         base.Die();
+        AudioController.Ins.PlaySound(AudioController.Ins.playerDeath);
         stateMachine.ChangeState(dead);
+        
     }
 }

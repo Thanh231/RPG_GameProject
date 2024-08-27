@@ -10,12 +10,26 @@ public class BlackHoleSkill : Skill
     [SerializeField] private float shrinkSpeed;
     BlackHoleController currenBlackHole;
     public float blackHoleDuration;
-
+    public float timeBlackHole;
+    public bool canUseBlackHole;
     public override void Start()
     {
         base.Start();
     }
-
+    private void Update()
+    {
+        timeBlackHole -= Time.deltaTime;
+    }
+    public override bool CanUseSkill()
+    {
+        if (timeBlackHole < 0)
+        {
+            timeBlackHole = cooldownTime;
+            return true;
+        }
+        Debug.Log("Skill is cooldown");
+        return false;
+    }
     public override void UseSkill()
     {
         GameObject blackHole = Instantiate(blachHolePrefabs,player.transform.position,Quaternion.identity);

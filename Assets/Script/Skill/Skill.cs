@@ -3,7 +3,7 @@ using UnityEngine;
 public class Skill : MonoBehaviour
 {
     public float cooldownTime;
-    private float timeValue;
+    public float timeValue {  get; private set; }
     public Player player;
     public virtual void Start()
     {
@@ -13,7 +13,7 @@ public class Skill : MonoBehaviour
     {
         timeValue -= Time.deltaTime;
     }
-    public bool CanUseSkill()
+    public virtual bool CanUseSkill()
     {
         if(timeValue < 0)
         {
@@ -27,5 +27,9 @@ public class Skill : MonoBehaviour
     public virtual void UseSkill()
     {
 
+    }
+    public void SetTimeValue(float _time)
+    {
+        timeValue = _time;
     }
 }

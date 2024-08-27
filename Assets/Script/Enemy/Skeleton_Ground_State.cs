@@ -1,7 +1,9 @@
+using UnityEngine;
+
 public class Skeleton_Ground_State : EnemyState
 {
     public Enemy_Skeleton skeleton;
-
+  
     public Skeleton_Ground_State(Enemy _enemy, EnemyStateMachine _stateMachine, string _animString, Enemy_Skeleton _skeleton) : base(_enemy, _stateMachine, _animString)
     {
         skeleton = _skeleton;
@@ -23,7 +25,8 @@ public class Skeleton_Ground_State : EnemyState
 
         if (skeleton.isKnockBack || skeleton.isFreeze) return;
 
-        if(enemy.IsDetectPlayer() && enemy.IsGround())
+
+        if(enemy.IsDetectPlayer() && skeleton.IsGround())
         {
             stateMachine.ChangeState(skeleton.enemy_battle);
         }

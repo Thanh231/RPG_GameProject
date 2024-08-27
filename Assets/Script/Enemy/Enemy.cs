@@ -16,7 +16,7 @@ public class Enemy : Entity
     protected override void Awake()
     {
         base.Awake();
-        defaultSpeed = speed;
+        defaultSpeed = base.speed;
         cd = GetComponent<CapsuleCollider2D>();
     }
 
@@ -59,12 +59,12 @@ public class Enemy : Entity
         {
             CloseCounterAttackWindow();
             anim.speed = 0;
-            speed = 0;
+            base.speed = 0;
         }
         else
         {
             anim.speed = 1;
-            speed = defaultSpeed;
+            base.speed = defaultSpeed;
         }
     }
     protected virtual IEnumerator FrezeTimer(float timer)
@@ -76,5 +76,23 @@ public class Enemy : Entity
     public void LastAnimString(string anim)
     {
         lastAnim = anim;
+    }
+    public override void DecreaseSpeed(float decreasePercent, float second)
+    {
+        speed = speed * (1 - decreasePercent);
+        anim.speed = 1 - decreasePercent;
+
+        StartCoroutine(RollBackSpeed(second));
+    }
+
+    IEnumerator RollBackSpeed(float second)
+    {
+        yield return new WaitForSeconds(second);
+        speed = defaultSpeed;
+        anim.speed = 1;
+    }
+    public void DestroyGO()
+    {
+        Destroy(gameObject);
     }
 }
